@@ -280,30 +280,22 @@ class DockerImage {
     int retry = 0;
     while (retry < 2) {
       try {
-        Archive outputArchive = Archive();
         for (var i = 0; i < layers; i++) {
           if (kDebugMode) {
             print('Extracting layer $i of $layers');
           }
           progress(i, layers, 0, 100);
           // Read archives layers
-          final bytes = await File('$path/layer_$i.tar.gz').readAsBytes();
-          final gzip = GZipDecoder().decodeBytes(bytes);
-          final archive = TarDecoder().decodeBytes(gzip);
-          for (final file in archive) {
-            if (file.isFile) {
-              outputArchive.addFile(file);
-            }
-          }
+          await extractFileToDisk('$path/layer_$i.tar.gz', '$path/extracted',
+              asyncWrite: true);
         }
-
-        final tarData = TarEncoder().encode(outputArchive);
-        final gzData = GZipEncoder().encode(tarData);
-
-        if (gzData != null) {
-          final fp = File('$distroPath/distros/$file.tar.gz');
-          await fp.writeAsBytes(gzData);
-        } else {}
+        Archive archive =
+            createArchiveFromDirectory(Directory('$path/extracted'));
+        final tar = TarEncoder().encode(archive);
+        final gz = GZipEncoder().encode(tar);
+        File('$distroPath/distros/$file.tar.gz')
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(gz!);
       } catch (e) {
         retry++;
         await Future.delayed(const Duration(seconds: 1));
