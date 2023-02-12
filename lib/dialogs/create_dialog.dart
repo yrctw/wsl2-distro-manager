@@ -140,8 +140,12 @@ Future<void> createInstance(
       // Remove prefix
       distroName = autoSuggestBox.text.split('dockerhub:')[1];
       // Get tag
-      String? image = distroName.split(':')[0];
-      String? tag = distroName.split(':')[1];
+      List<String> split = distroName.split(':');
+      String? image = split[0];
+      String? tag;
+      if (split.length > 1) {
+        tag = split[1];
+      }
 
       bool isDownloaded = false;
       // Check if image already downloaded
