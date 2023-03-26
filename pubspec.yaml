@@ -2,23 +2,23 @@ name: wsl2distromanager
 description: A GUI to quickly manage your WSL instances.
 
 publish_to: 'none'
-version: 1.6.0 # Current version
+version: 1.6.2 # Current version
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localizations: 
+  flutter_localizations:
     sdk: flutter
   localization: ^2.1.0
   desktop_window: ^0.4.0
-  fluent_ui: ^4.3.0
+  fluent_ui: ^4.4.1
   system_theme: ^2.1.0
   file_picker: ^5.0.1
   url_launcher: ^6.1.6
-  dio: ^4.0.6
+  dio: ^5.0.3
   package_info_plus: ^3.0.2
   plausible_analytics: ^0.2.1
   shared_preferences: ^2.0.15
@@ -47,5 +47,17 @@ flutter:
     - lib/i18n/
     - assets/scripts/settings.bash
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+msix_config:
+  display_name: WSL2 Manager
+  publisher_display_name: Bostrot
+  identity_name: 9891PhantomDevs.WSL2Manager
+  msix_version: 1.6.2.0
+  publisher: CN=94697CA2-9680-453C-A7CB-2FA531A4A341
+  logo_path: .\assets\logo.png
+  start_menu_icon_path: .\assets\logo.png
+  tile_icon_path: .\assets\logo.png
+  icons_background_color: transparent
+  architecture: x64
+  capabilities: 'internetClient'
+  languages: en-US, en-GB, en-AU, de-DE, pt-BR, pt-PT, zh-CN, zh-TW, zh-HK
+  install_certificate: false

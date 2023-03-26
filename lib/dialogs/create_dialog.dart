@@ -128,9 +128,6 @@ Future<void> createInstance(
     }
 
     Navigator.of(context, rootNavigator: true).pop();
-    ProcessResult result = await api.create(
-        name, distroName, location, (String msg) => Notify.message(msg),
-        image: isDockerImage);
 
     // Check if docker image
     if (distroName.startsWith('dockerhub:')) {
@@ -172,7 +169,7 @@ Future<void> createInstance(
     }
 
     // Create instance
-    result = await api.create(
+    ProcessResult result = await api.create(
         name, distroName, location, (String msg) => Notify.message(msg),
         image: isDockerImage);
 
@@ -325,15 +322,6 @@ class _CreateWidgetState extends State<CreateWidget> {
                     list.add(AutoSuggestBoxItem(
                       value: snapshot.data![i],
                       label: snapshot.data![i],
-                      child: TextFieldTapRegion(
-                        onTapInside: (event) => node.requestFocus(),
-                        child: SizedBox(
-                            width: double.infinity,
-                            height: 20.0,
-                            child: Text(
-                              snapshot.data![i],
-                            )),
-                      ),
                     ));
                   }
                 } else if (snapshot.hasError) {}

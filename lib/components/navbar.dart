@@ -69,7 +69,7 @@ class _NavbarState extends State<Navbar> {
           themeMode: !customTheme ? ThemeMode.system : appTheme.mode,
           debugShowCheckedModeBanner: false,
           color: appTheme.color,
-          darkTheme: ThemeData(
+          darkTheme: FluentThemeData(
             brightness: Brightness.dark,
             accentColor: appTheme.color,
             visualDensity: VisualDensity.standard,
@@ -77,7 +77,7 @@ class _NavbarState extends State<Navbar> {
               glowFactor: is10footScreen() ? 2.0 : 0.0,
             ),
           ),
-          theme: ThemeData(
+          theme: FluentThemeData(
             accentColor: appTheme.color,
             visualDensity: VisualDensity.standard,
             focusTheme: FocusThemeData(
@@ -93,7 +93,18 @@ class _NavbarState extends State<Navbar> {
             if (supportedLocales.contains(locale)) {
               return locale;
             }
-            Locale lang = Locale(locale.languageCode, '');
+
+            // Custom matching for chinese (simplified and traditional)
+            if (language.toLowerCase().contains("hans")) {
+              return const Locale('zh', 'CN');
+            } else if (language.toLowerCase().contains("hant")) {
+              return const Locale('zh', 'TW');
+            } else if (locale.languageCode == "zh") {
+              return const Locale('zh', 'CN');
+            }
+
+            // No exact match, try language only
+            final Locale lang = Locale(locale.languageCode, '');
             if (supportedLocales.contains(lang)) {
               return lang;
             }
@@ -108,7 +119,9 @@ class _NavbarState extends State<Navbar> {
             Locale('en', ''), // English, no country code
             Locale('de', ''), // German, no country code
             Locale('pt', ''), // Portuguese, no country code
-            Locale('zh', ''), // Chinese, no country code
+            Locale('zh', ''), // Chinese, simplified
+            Locale('zh', 'TW'), // Chinese, taiwan (traditional)
+            Locale('zh', 'HK'), // Chinese, hongkong (traditional)
           ],
           builder: (context, child) {
             return navWidget(appTheme, textColor, context, isDarkMode);
